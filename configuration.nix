@@ -104,6 +104,16 @@
   #  wget
     git
     xfce.xfce4-whiskermenu-plugin
+    xfce.xfce-weather-plugin
+    google-chrome
+    papirus-icon-theme
+    discord
+    vscode
+    ipscan
+    distrobox
+    pcloud
+    zoom-us
+    plank
  
   ];
 
