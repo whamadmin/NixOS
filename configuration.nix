@@ -104,7 +104,7 @@
   #  wget
     git
     xfce.xfce4-whiskermenu-plugin
-    xfce.xfce-weather-plugin
+    xfce.xfce4-weather-plugin
     google-chrome
     papirus-icon-theme
     discord
