@@ -24,6 +24,9 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
+  # Enable Tailscale
+  services.tailscale.enable = true;
+
   # Set your time zone.
   time.timeZone = "America/New_York";
 
@@ -78,6 +81,13 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  # Enable Virt-manager
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
+
+  # Enable Flatpak
+  services.flatpak.enable = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.dave = {
     isNormalUser = true;
@@ -125,9 +135,12 @@
     runelite
     onlyoffice-bin
     pika-backup
-    joplin
+    joplin-desktop
     rpi-imager
-    
+    ferdium    
+    ipscan
+    tailscale
+    git
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
