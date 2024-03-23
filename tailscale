@@ -1,0 +1,13 @@
+# How to install Tailscale on NixOS:
+
+- Add "services.tailscale.enable = true;" to your Nix config
+- Add tailscale package to configuration.nix file
+  - pkgs.tailscale
+- Set up the Tailscale service to autostart at boot
+  - sudo systemctl daemon-reload
+  - sudo systemctl enable tailscaled
+  - sudo systemctl start tailscaled
+- Check tailscale status 
+  - sudo systemctl status tailscaled
+- Type "tailescale up"
+  - Click on link, log in to Tailscale, and press "connect"
