@@ -1,4 +1,4 @@
-	pkgs.yaru-theme
+    pkgs.yaru-theme
     pkgs.google-chrome
     pkgs.papirus-icon-theme
     pkgs.discord
