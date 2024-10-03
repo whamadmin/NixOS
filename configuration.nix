@@ -11,11 +11,10 @@
     ];
 
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/vda";
-  boot.loader.grub.useOSProber = true;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos-xfce"; # Define your hostname.
+  networking.hostName = "StonyNix"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -24,6 +23,10 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+
+  # Enable Blueteeth
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -46,9 +49,17 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # Enable the XFCE Desktop Environment.
-  services.xserver.displayManager.lightdm.greeters.slick.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
+  # Use the proprietary NVIDIA drivers
+  services.xserver.videoDrivers = [ "nvidia" ];
+
+  # Optionally, enable the OpenGL library for hardware acceleration
+  hardware.opengl.enable = true;
+
+
+  # Enable the Budgie Desktop environment.
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.budgie.enable = true;
+  programs.dconf.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
@@ -80,42 +91,175 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.whamlib = {
+  users.users.dave = {
     isNormalUser = true;
-    description = "Westhampton Library";
-    extraGroups = [ "networkmanager" "wheel" ];
+    description = "Dave J";
+    extraGroups = [ "networkmanager" "wheel" "adbusers" "libvirtd" "video" "render" "audio" ];
     packages = with pkgs; [
-      firefox
-      kitty
-      kitty-themes
-      lightdm-slick-greeter
-      yaru-theme
-      neofetch
+    #  thunderbird
     ];
   };
 
+  #----=[ Fonts ]=----#
+  fonts.packages = with pkgs; [
+    noto-fonts
+    ubuntu_font_family
+    noto-fonts-emoji
+    liberation_ttf
+    fira-code
+    fira-code-symbols
+    mplus-outline-fonts.githubRelease
+    dina-font
+    fira
+  ];
+
+  # Lets get Fish Shell - CF 6-1-22
+  programs.fish.enable = true;
+
+  # Flatpak bitches - CF 6-1-22
+  services.flatpak.enable = true;
+  xdg.portal.enable = true;
+
+  # Install firefox.
+  programs.firefox.enable = true;
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  # Enable Nix experimental features and Flakes 4-17-24
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Virt-manager
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
-    git
-    xfce.xfce4-whiskermenu-plugin
-    xfce.xfce4-weather-plugin
-    google-chrome
-    papirus-icon-theme
-    discord
-    vscode
-    ipscan
-    distrobox
-    pcloud
-    zoom-us
-    plank
- 
+     htop
+     nixFlakes
+     pkgs.tailscale
+     btop
+     htop
+     pciutils
+     magic-wormhole
+     yt-dlp
+     pkgs.cifs-utils
+     pkgs.samba
+     nmap
+     mosh
+     fuse
+     fuse3
+     appimage-run
+     git
+     jmtpfs
+     gnumake
+     unzip
+     zip
+     gnupg
+     pkgs.restic
+     pkgs.autorestic
+     pkgs.restique
+     google-chrome
+     quickemu
+     quickgui
+     x32edit
+     junction
+     distrobox
+     tor-browser
+     v4l-utils
+     v4l2-relayd
+     libv4l
+     sunshine
+     gtop
+     ventoy
+     kitty
+     cool-retro-term
+     avahi
+     mesa
+     libffi
+     libevdev
+     libcap
+     libdrm
+     xorg.libXrandr
+     xorg.libxcb
+     ffmpeg-full
+     libevdev
+     libpulseaudio
+     xorg.libX11
+     pkgs.xorg.libxcb
+     xorg.libXfixes
+     libva
+     libvdpau
+     pkgs.moonlight-qt
+     pkgs.sunshine
+     firefox
+     telegram-desktop
+     mpv
+     haruna
+     trayscale
+     reaper
+     lame
+     xdotool
+     pwvucontrol
+     easyeffects
+     pipecontrol
+     wireplumber
+     pavucontrol
+     ncpamixer
+     carla
+     vlc
+     typora
+     neovim
+     vimPlugins.LazyVim
+     maestral-gui
+     pkgs.amdvlk
+     pkgs.driversi686Linux.amdvlk
+     element-desktop
+     gh
+     gitui
+     cmake
+     ispell
+     gcc
+     go
+     aspell
+     gnumake
+     glxinfo
+     libnotify
+     yt-dlp
+     dstat
+     file
+     iotop
+     lshw-gui
+     google-chrome
+     geany
+     vscode
+     virt-manager
+     zoom-us
+     rustdesk-flutter
+     fastfetch
+     bitwarden-desktop
+     dunst
+
+
   ];
+
+  # Unstable Apps
+  
+  # Service to start
+  
+
+  # Enable Auto Optimising the store CF 5-18-23
+  nix.settings.auto-optimise-store = true;
+
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    # options = "--delete-older-than 10d";
+    options = "--keep-generations 5";
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -134,7 +278,7 @@
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -142,6 +286,7 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "24.05"; # Did you read the comment?
 
 }
+
